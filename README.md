@@ -1,2 +1,2 @@
 # CDN-FX
-Description needed!
+Created with Java 8. (IntelliJ and SceneBuilder)
