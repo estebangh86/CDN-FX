@@ -16,7 +16,7 @@ public class DebugLogger {
                 path = URLDecoder.decode(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
                 logger = Logger.getLogger("DebugLogger");
                 if(!DetectOS.isMac()){
-                    handler = new FileHandler(path.substring(1, path.lastIndexOf("/")) + "/debug.log");
+                    handler = new FileHandler(path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/debug.log");
                     logger.addHandler(handler);
                     SimpleFormatter formatter = new SimpleFormatter();
                     handler.setFormatter(formatter);

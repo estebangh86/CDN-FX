@@ -290,9 +290,11 @@ public class CDNFXController implements Initializable {
         tableTDVTickets.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         //TABLEFILTER
-        TDVTableFilter.filteredTickets = new FilteredList<>(titlelist, t -> true);
-        tdvSortedList = new SortedList<>(TDVTableFilter.createTableFilter(textTDVSearch, listTDVCategory));
-        tdvSortedList.comparatorProperty().bind(tableTDVTickets.comparatorProperty());
+        if (titlelist != null) {
+            TDVTableFilter.filteredTickets = new FilteredList<>(titlelist, t -> true);
+            tdvSortedList = new SortedList<>(TDVTableFilter.createTableFilter(textTDVSearch, listTDVCategory));
+            tdvSortedList.comparatorProperty().bind(tableTDVTickets.comparatorProperty());
+        }
         tableTDVTickets.setItems(tdvSortedList);
 
         if(DetectOS.isMac()){
@@ -353,44 +355,46 @@ public class CDNFXController implements Initializable {
         List<Integer> apptypeCount = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);  // es-app, dlp, demo, upd-p, dlc, dsiw, dsisys, dsidat, sys, myst, any
 
         //SET TYPES
-        for(Ticket tiktik: titlelist){
-            String titleid = tiktik.getTitleID();
-            String typecheck = titleid.substring(4, 8).toLowerCase();
+        if (titlelist != null) {
+            for (Ticket tiktik : titlelist) {
+                String titleid = tiktik.getTitleID();
+                String typecheck = titleid.substring(4, 8).toLowerCase();
 
-            if(typecheck.equals("0000")){
-                tiktik.setType(Ticket.Type.ESHOP);
-                apptypeCount.set(0, apptypeCount.get(0)+1);
-            }else if(typecheck.equals("0001")){
-                tiktik.setType(Ticket.Type.DLP);
-                apptypeCount.set(1, apptypeCount.get(1)+1);
-            }else if(typecheck.equals("0002")){
-                tiktik.setType(Ticket.Type.DEMO);
-                apptypeCount.set(2, apptypeCount.get(2)+1);
-            }else if(typecheck.equals("000e")){
-                tiktik.setType(Ticket.Type.UPDATE);
-                apptypeCount.set(3, apptypeCount.get(3)+1);
-            }else if(typecheck.equals("008c")){
-                tiktik.setType(Ticket.Type.DLC);
-                apptypeCount.set(4, apptypeCount.get(4)+1);
-            }else if(typecheck.equals("8004")){
-                tiktik.setType(Ticket.Type.DSIWARE);
-                apptypeCount.set(5, apptypeCount.get(5)+1);
-            }else if(((Long.parseLong(typecheck, 16)) & 0x10) == 0x10){
-                tiktik.setType(Ticket.Type.SYSTEM);
-                apptypeCount.set(8, apptypeCount.get(8)+1);
-            }else if(typecheck.equals("8005")){
-                tiktik.setType(Ticket.Type.DSISYSAPP);
-                apptypeCount.set(6, apptypeCount.get(6)+1);
-            }else if(typecheck.equals("800f")){
-                tiktik.setType(Ticket.Type.DSISYSDAT);
-                apptypeCount.set(7, apptypeCount.get(7)+1);
-            }else{
-                tiktik.setType(Ticket.Type.MYSTERY);
-                apptypeCount.set(9, apptypeCount.get(9)+1);
+                if (typecheck.equals("0000")) {
+                    tiktik.setType(Ticket.Type.ESHOP);
+                    apptypeCount.set(0, apptypeCount.get(0) + 1);
+                } else if (typecheck.equals("0001")) {
+                    tiktik.setType(Ticket.Type.DLP);
+                    apptypeCount.set(1, apptypeCount.get(1) + 1);
+                } else if (typecheck.equals("0002")) {
+                    tiktik.setType(Ticket.Type.DEMO);
+                    apptypeCount.set(2, apptypeCount.get(2) + 1);
+                } else if (typecheck.equals("000e")) {
+                    tiktik.setType(Ticket.Type.UPDATE);
+                    apptypeCount.set(3, apptypeCount.get(3) + 1);
+                } else if (typecheck.equals("008c")) {
+                    tiktik.setType(Ticket.Type.DLC);
+                    apptypeCount.set(4, apptypeCount.get(4) + 1);
+                } else if (typecheck.equals("8004")) {
+                    tiktik.setType(Ticket.Type.DSIWARE);
+                    apptypeCount.set(5, apptypeCount.get(5) + 1);
+                } else if (((Long.parseLong(typecheck, 16)) & 0x10) == 0x10) {
+                    tiktik.setType(Ticket.Type.SYSTEM);
+                    apptypeCount.set(8, apptypeCount.get(8) + 1);
+                } else if (typecheck.equals("8005")) {
+                    tiktik.setType(Ticket.Type.DSISYSAPP);
+                    apptypeCount.set(6, apptypeCount.get(6) + 1);
+                } else if (typecheck.equals("800f")) {
+                    tiktik.setType(Ticket.Type.DSISYSDAT);
+                    apptypeCount.set(7, apptypeCount.get(7) + 1);
+                } else {
+                    tiktik.setType(Ticket.Type.MYSTERY);
+                    apptypeCount.set(9, apptypeCount.get(9) + 1);
+                }
             }
-        }
 
-        lblTDVTotalCount.setText(Integer.toString(titlelist.size()));
+            lblTDVTotalCount.setText(Integer.toString(titlelist.size()));
+        }
         for(int ticketcount:apptypeCount){
             switch (i){
                 case 0:
@@ -1237,7 +1241,7 @@ public class CDNFXController implements Initializable {
     @FXML
     protected void btnTDAClickedOpenFile() throws Exception{
         String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path = path.substring(1, path.lastIndexOf("/")) + "/";
+        path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
         //FILECHOOSER
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open encTitleKeys.bin");
@@ -1652,7 +1656,7 @@ public class CDNFXController implements Initializable {
     @FXML
     protected void menuClickedSelectOutput() throws Exception{
         String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path = path.substring(1, path.lastIndexOf("/")) + "/";
+        path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
         //DIRECTORYCHOOSER
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(path));
@@ -1667,7 +1671,7 @@ public class CDNFXController implements Initializable {
     @FXML
     protected void menuTDClickedSelectOutputfolder() throws Exception{
         String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path = path.substring(1, path.lastIndexOf("/")) + "/";
+        path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
         //DIRECTORYCHOOSER
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(path));
@@ -1731,7 +1735,7 @@ public class CDNFXController implements Initializable {
     @FXML
     protected void menuTMClickedOpenTicket() throws Exception{
         String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path = path.substring(1, path.lastIndexOf("/")) + "/";
+        path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
         //FILECHOOSER
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open ticket.db");
@@ -1749,7 +1753,7 @@ public class CDNFXController implements Initializable {
     @FXML
     protected void menuTDClickedSelectTikOutputfolder() throws Exception{
         String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path = path.substring(1, path.lastIndexOf("/")) + "/";
+        path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
         //DIRECTORYCHOOSER
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(path));

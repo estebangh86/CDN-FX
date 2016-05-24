@@ -34,7 +34,7 @@ public class XMLUpdater {
                 content = inputLine;
             }
             String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            path = path.substring(1, path.lastIndexOf("/")) + "/";
+            path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
 
             if(!new File(path+"community.xml").exists()){
                 PropertiesHandler.setProperties(content, "xmlversion");
@@ -69,7 +69,7 @@ public class XMLUpdater {
         try{
             DebugLogger.log("Updating XML...", Level.INFO);
             String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            path = path.substring(1, path.lastIndexOf("/")) + "/";
+            path = path.substring(DetectOS.isWindows() ? 1 : 0, path.lastIndexOf("/")) + "/";
             ReadableByteChannel in = Channels.newChannel(new URL(updateURL).openStream());
             FileChannel out = new FileOutputStream((path+"community.xml")).getChannel();
 

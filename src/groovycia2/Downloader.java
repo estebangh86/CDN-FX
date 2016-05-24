@@ -552,7 +552,7 @@ public class Downloader extends Thread {
         DebugLogger.log("Downloading icon...", Level.INFO);
         try{
             String path2 = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            path2 = path2.substring(1, path2.lastIndexOf("/")) + "/";
+            path2 = path2.substring(DetectOS.isWindows() ? 1 : 0, path2.lastIndexOf("/")) + "/";
 
             String typecheck = titleid.substring(4, 8).toLowerCase();
 
@@ -627,7 +627,8 @@ public class Downloader extends Thread {
         String makecmd = " \"" + rawDir + "\" \"" + ciaDir + titleid +".cia\"";
         String cdn_path = Tools.getMakeCDN();
 
-        ciaDir = ciaDir.substring(0,2) + ciaDir.substring(2).replace("/", "\\").replaceAll(":", "").replaceAll("\"","").replaceAll("\\?", "").replaceAll("|","").replaceAll("\\*","").replaceAll("|","").replaceAll("<","").replaceAll(">","").replaceAll("/","").replace(".","");
+        if(DetectOS.isWindows())
+            ciaDir = ciaDir.substring(0,2) + ciaDir.substring(2).replace("/", "\\").replaceAll(":", "").replaceAll("\"","").replaceAll("\\?", "").replaceAll("|","").replaceAll("\\*","").replaceAll("|","").replaceAll("<","").replaceAll(">","").replaceAll("/","").replace(".","");
 
         createDirectory(ciaDir);
 
@@ -642,8 +643,8 @@ public class Downloader extends Thread {
         if(!DetectOS.isWindows()){
             cdn_path = "/" + Tools.getMakeCDN();
             Runtime.getRuntime().exec("chmod +x " + cdn_path);
+            cdn_path = cdn_path.substring(0, cdn_path.lastIndexOf("/")) + "/." + cdn_path.substring(cdn_path.lastIndexOf("/"), cdn_path.length());
             makecmd = " " + rawDir + " " + ciaDir + titleid +".cia";
-            ciaDir = ciaDir.replace("\\", "/");
 
             if(PropertiesHandler.getProperties("titlename") != null)
                 if(PropertiesHandler.getProperties("titlename").equals("yes"))

@@ -218,7 +218,7 @@ public class SettingsController implements Initializable{
     @FXML
     protected void btnTMClickedOutputSelect() throws Exception{
         String path2 = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path2 = path2.substring(1, path2.lastIndexOf("/")) + "/";
+        path2 = path2.substring(DetectOS.isWindows() ? 1 : 0, path2.lastIndexOf("/")) + "/";
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(path2));
         File selectedDirectory = directoryChooser.showDialog(btnCancel.getScene().getWindow());
@@ -233,7 +233,7 @@ public class SettingsController implements Initializable{
     @FXML
     protected void btnTMClickedTicketSelect() throws Exception{
         String path2 = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path2 = path2.substring(1, path2.lastIndexOf("/")) + "/";
+        path2 = path2.substring(DetectOS.isWindows() ? 1 : 0, path2.lastIndexOf("/")) + "/";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open ticket.db");
         fileChooser.setInitialDirectory(new File(path2));
@@ -358,7 +358,7 @@ public class SettingsController implements Initializable{
     @FXML
     protected void btnTDClickedFile() throws Exception{
         String path2 = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path2 = path2.substring(1, path2.lastIndexOf("/")) + "/";
+        path2 = path2.substring(DetectOS.isWindows() ? 1 : 0, path2.lastIndexOf("/")) + "/";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open encTitleKeys.bin");
         fileChooser.setInitialDirectory(new File(path2));
@@ -376,7 +376,7 @@ public class SettingsController implements Initializable{
     @FXML
     protected void  btnTDClickedFolder() throws Exception{
         String path2 = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path2 = path2.substring(1, path2.lastIndexOf("/")) + "/";
+        path2 = path2.substring(DetectOS.isWindows() ? 1 : 0, path2.lastIndexOf("/")) + "/";
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(path2));
         File selectedDirectory = directoryChooser.showDialog(btnCancel.getScene().getWindow());
@@ -391,7 +391,7 @@ public class SettingsController implements Initializable{
     @FXML
     protected void btnTDClickedTikFolder() throws Exception{
         String path2 = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        path2 = path2.substring(1, path2.lastIndexOf("/")) + "/";
+        path2 = path2.substring(DetectOS.isWindows() ? 1 : 0, path2.lastIndexOf("/")) + "/";
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(path2));
         File selectedDirectory = directoryChooser.showDialog(btnCancel.getScene().getWindow());
